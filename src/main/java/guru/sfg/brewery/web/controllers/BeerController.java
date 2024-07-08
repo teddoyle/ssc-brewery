@@ -36,7 +36,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Array;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,7 +92,10 @@ public class BeerController {
     @GetMapping("/new")
     public String initCreationForm(Model model) {
         model.addAttribute("beer", Beer.builder().build());
-        model.addAttribute("beerStyles", Arrays.stream(BeerStyleEnum.values()).map(BeerStyleEnum::name).toList());
+        List <String> styleList = new LinkedList<String>();
+        Arrays.stream(BeerStyleEnum.values()).forEach(s -> styleList.add(s.name()));
+        model.addAttribute("beerStyles", styleList);
+                // Arrays.stream(BeerStyleEnum.values()).(BeerStyleEnum::name));
         return "beers/createBeer";
     }
 
@@ -115,7 +120,9 @@ public class BeerController {
         if (beerRepository.findById(beerId).isPresent()) {
             model.addAttribute("beer", beerRepository.findById(beerId).get());
         }
-        model.addAttribute("beerStyles", Arrays.stream(BeerStyleEnum.values()).map(BeerStyleEnum::name).toList());
+        List<String> styleList = new LinkedList<String>();
+        Arrays.stream(BeerStyleEnum.values()).forEach(s -> styleList.add(s.name()));
+        model.addAttribute("beerStyles", styleList);
         return "beers/createOrUpdateBeer";
     }
 
